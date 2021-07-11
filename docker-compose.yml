@@ -1,0 +1,64 @@
+version: '3'
+#Define services
+services:
+
+  #MySQL Database for the application
+  instazoo-db:
+    image: "mysql/mysql-server:5.7"
+    container_name: instazoo-db
+    restart: unless-stopped
+    #Volume mounted for database for the storage
+    volumes:
+      - instazoo-data:/var/lib/mysql
+    networks:
+      - instazoo_net
+    ports:
+      - 3307:3307 # Forward the exposed port 3307 on the container to port 3307 on the host machine
+    #Environment variable for DB name, user and password
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DB=${MYSQL_DB}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=instazoo-db
+      - MYSQL_PORT=3306
+
+  #Back-end Spring Boot Application
+  instazoo-server:
+    #The docker file in scrum-app build the jar and provides the docker image with the following name.
+    build: ./server
+    container_name: server
+    restart: unless-stopped
+    #Environment variables for Spring Boot Application.
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DB=${MYSQL_DB}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=instazoo-db
+      - MYSQL_PORT=3306
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - instazoo_net
+    ports:
+      - 8080:8080 # Forward the exposed port 8080 on the container to port 8080 on the host machine
+    links:
+      - instazoo-db
+
+  #Fron-end Angular Application
+  instazoo-client:
+    build: ./client
+    container_name: client
+    restart: unless-stopped
+    networks:
+      - instazoo_net
+    ports:
+      - 80:80
+    links:
+      - instazoo-server
+
+#Volumes for DB data
+volumes:
+  instazoo-data: {}
+networks:
+  instazoo_net: {}
