@@ -11,12 +11,11 @@ After that you can manualy dicribe next enviroment variables or via bash script 
 ```
 ./run.sh [option]
 Used options:
-        start                 --- start docker-compose
-        stop                 --- stop docker-compose
-        rm-dockers      --- remove all docker containers
-        rm-vars            --- remove all environment variables
-        add-vars          --- add all enviroment variables
-        cat-vars           --- show all enviroment variables"
+        start           --- start docker-compose
+        stop            --- stop docker-compose
+        rm-vars         --- remove all environment variables for this project
+        add-vars        --- add all enviroment variables
+        cat-vars        --- show all enviroment variables"
 ```
 For exapmle, if you want run docker compose just write command
 ```

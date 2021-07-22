@@ -5,7 +5,6 @@ if [ $# -ne 1 ] ; then
     Used commands:
         start           --- start docker-compose
         stop            --- stop docker-compose
-        rm-dockers      --- remove all docker containers
         rm-vars         --- remove all environment variables
         add-vars        --- add all enviroment variables
         cat-vars        --- print all enviroment variables"
@@ -117,10 +116,6 @@ elif [ $1 == "start" ] ; then
     exit 0;
 elif [ $1 == "stop" ] ; then
     docker-compose down
-    exit 0;
-elif [ $1 == "rm-dockers" ] ; then
-    docker stop $(docker ps -a -q) 
-    docker rmi -f $(docker images -a -q)
     exit 0;
 else 
     echo "$1 is invalid command
